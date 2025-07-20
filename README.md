@@ -41,11 +41,11 @@ GET /check?domain=cloudflare.com&dns=1.1.1.1&timeout=5
 
 ### ✅ Parameters
 
-| Parameter | Required | Description                         | Example           |
-|-----------|----------|-------------------------------------|-------------------|
-| `domain`  | ✅       | Domain to validate (IDN supported)  | `cloudflare.com` |
-| `dns`     | ❌       | Upstream DNS resolver IP            | `1.1.1.1`         |
-| `timeout` | ❌       | Query timeout in seconds            | `5`               |
+| Parameter | Required | Description                         | Default     | Example           |
+|-----------|----------|-------------------------------------|-------------|-------------------|
+| `domain`  | ✅       | Domain to validate (IDN supported)  | —           | `cloudflare.com` |
+| `dns`     | ❌       | Upstream DNS resolver IP            | `9.9.9.9`   | `1.1.1.1`         |
+| `timeout` | ❌       | Query timeout in seconds            | `10`        | `5`               |
 
 
 ### ✅ Successful DNSSEC Response
