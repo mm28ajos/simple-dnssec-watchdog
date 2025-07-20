@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - '*'
+      - 'v*'
   schedule:
     - cron: '0 4 1 * *'
 
@@ -17,14 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Docker meta
+      - name: Docker meta (tag-aware)
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: mm28ajos/simple-dnssec-watchdog
           tags: |
-            type=semver,pattern={{version}}
-            type=ref,event=branch
+            type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
