@@ -7,7 +7,7 @@ on:
     tags:
       - '*'
   schedule:
-    - cron:  '0 4 1 * *'
+    - cron: '0 4 1 * *'
 
 jobs:
   docker:
@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}
+          images: mm28ajos/simple-dnssec-watchdog
           tags: |
             type=semver,pattern={{version}}
             type=ref,event=branch
@@ -34,6 +34,13 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Validate secrets
+        run: |
+          if [[ -z "${{ secrets.DOCKER_USERNAME }}" || -z "${{ secrets.DOCKER_PASSWORD }}" ]]; then
+            echo "🚫 DockerHub credentials not found!"
+            exit 1
+          fi
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
@@ -51,8 +58,8 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:buildcache,mode=max
+          cache-from: type=registry,ref=mm28ajos/simple-dnssec-watchdog:buildcache
+          cache-to: type=registry,ref=mm28ajos/simple-dnssec-watchdog:buildcache,mode=max
 
       - name: Sync README to Docker Hub
         if: github.event_name != 'schedule'
